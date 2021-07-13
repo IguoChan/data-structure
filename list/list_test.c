@@ -4,12 +4,13 @@
 #include <CUnit/TestDB.h>
 
 #include "list.h"
+#include "list_sentinel.h"
 
 list_t *l = NULL;
 
 void test_list_create()
 {
-    l = list_create();
+    l = list_s_create();
     list_print(l);
 }
 
@@ -20,10 +21,10 @@ void test_list_append()
     for (int i = 0; i < 10; i++, data++) {
         data = malloc(sizeof(int));
         *data = 10 - i;
-        ret = list_append(l, data);
+        ret = list_s_append(l, data);
         if (ret < 0) CU_FAIL("APPEND FAIL!");
     }    
-    list_print(l);
+    list_s_print(l);
 }
 
 int main(int argc, char * argv[])

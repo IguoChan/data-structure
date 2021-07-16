@@ -1,4 +1,3 @@
-
 #include "list.h"
 
 list_t *list_create(void)
@@ -323,8 +322,8 @@ void list_print(list_t *list)
 {
     node_t *node;
     int i = 0;
-    printf("Header-->");
+    printf("[CNT:%d]: {Header} ——> ", list->cnt);
     for (node = list->head; node; node = node->next, i++)
-        printf("Node[%d]: %d-->", i, *(int*)(node->data));
+        printf("{Node[%d]: %d} ——> ", i, *(int*)(node->data));
     printf("NULL\n");
 }

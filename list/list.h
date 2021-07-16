@@ -32,3 +32,5 @@ typedef int (*match_t)(void *, void *);
 list_t *list_create(void);
 int list_append(list_t *list, void *data);
 void list_print(list_t *list);
+int list_prepend(list_t *list, void *data);
+int list_insert_at(list_t *list, unsigned int pos, void *data);

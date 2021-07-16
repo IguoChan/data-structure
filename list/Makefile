@@ -9,7 +9,6 @@ DEP_DIR := $(BUILD_DIR)/deps
 
 # define PATH
 LOCAL_PATH = $(shell dirname "${BASH_SOURCE[0]}")
-$(info ${LOCAL_PATH})
 
 # define the sources and objects
 SOURCES := $(shell find $(LOCAL_PATH)/ -name "*.c" -not -name "*_test.c")

@@ -1,19 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct node
-{
-    struct node *prev;
-    struct node *next;
-    void *data;
-} node_t;
+#ifdef CHOOSE_DOUBLY_LINK_LIST
 
-typedef struct list
-{    
-    struct node *head;
-    struct node *tail;
-    unsigned int cnt;
-} list_t;
+typedef struct node node_t;
+typedef struct list list_t;
 
 typedef int (*match_t)(void *, void *);
 
@@ -34,3 +25,7 @@ int list_append(list_t *list, void *data);
 void list_print(list_t *list);
 int list_prepend(list_t *list, void *data);
 int list_insert_at(list_t *list, unsigned int pos, void *data);
+void *list_retrieve_data_at(list_t *list, unsigned int pos);
+int list_remove_data(list_t *list, void *data);
+int list_size(list_t *list);
+#endif

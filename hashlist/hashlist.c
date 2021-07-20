@@ -2,6 +2,19 @@
 
 #include "hashlist.h"
 
+typedef struct hashlist_int_data
+{
+    int key;
+    void *data;
+    UT_hash_handle hh;
+} hashlist_int_data_t;
+
+
+struct hashlist_int {
+    hashlist_int_data_t *head;
+    int cnt;
+};
+
 hashlist_int_t *hashlist_create_int()
 {
     hashlist_int_t *hl = malloc(sizeof(hashlist_int_t));

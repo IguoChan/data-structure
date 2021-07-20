@@ -1,4 +1,19 @@
-#include "list.h"
+#include "doubly_linked_list.h"
+#ifdef CHOOSE_DOUBLY_LINK_LIST
+
+struct node
+{
+    struct node *prev;
+    struct node *next;
+    void *data;
+};
+
+struct list
+{    
+    struct node *head;
+    struct node *tail;
+    unsigned int cnt;
+};
 
 list_t *list_create(void)
 {
@@ -327,3 +342,4 @@ void list_print(list_t *list)
         printf("{Node[%d]: %d} ——> ", i, *(int*)(node->data));
     printf("NULL\n");
 }
+#endif

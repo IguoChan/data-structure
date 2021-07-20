@@ -80,8 +80,8 @@ int main(int argc, char * argv[])
 {
     test_hashlist_create_int();
     test_hashlist_add_int();
-    // test_hashlist_find_int();
+    test_hashlist_find_int();
     test_hashlist_delete_int();
-    test_hashlist_destroy_int();
+    // test_hashlist_destroy_int();
     // CU_PASS("LIST TEST SUCCESS!");
 }

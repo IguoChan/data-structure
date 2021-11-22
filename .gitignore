@@ -1,8 +1,12 @@
 # test
 test-*
 
+# bak
+*.bak
+
 # ide
 .vscode*
+.idea*
 
 # Prerequisites
 *.d

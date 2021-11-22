@@ -1,5 +1,6 @@
 # define the target
-TARGET = data-structure
+TARGET = binary_tree.a
+TEST_TARGET = test-tree
 
 # define the Build Directory
 BUILD_DIR = build
@@ -7,29 +8,41 @@ OBJ_DIR := $(BUILD_DIR)/objs
 DEP_DIR := $(BUILD_DIR)/deps
 
 # define PATH
-LOCAL_PATH = $(shell pwd)
+LOCAL_PATH = $(shell dirname "${BASH_SOURCE[0]}")
 
 # define the sources and objects
-SOURCES := $(shell find $(LOCAL_PATH)/ -name "*.c")
+SOURCES := $(shell find $(LOCAL_PATH)/ -name "*.c" -not -name "*_test.c")
 OBJS := $(addprefix $(OBJ_DIR)/, $(patsubst %.c, %.o, $(notdir $(SOURCES))))
 DEPS := $(addprefix $(DEP_DIR)/, $(patsubst %.c, %.d, $(notdir $(SOURCES))))
 
+TESTC := $(shell find $(LOCAL_PATH)/ -name "*_test.c")
+TESTOBJ := $(addprefix $(OBJ_DIR)/, $(patsubst %.c, %.o, $(notdir $(TESTC))))
+TESTDEPS := $(addprefix $(DEP_DIR)/, $(patsubst %.c, %.d, $(notdir $(TESTC))))
+
 # define VPATH
-VPATH = $(LOCAL_PATH):$(LOCAL_PATH)/list/:$(LOCAL_PATH)/queue/
+VPATH = $(LOCAL_PATH)
 
 # define the includes, compile and link flags
-INCLUDES := -I$(LOCAL_PATH) -I$(LOCAL_PATH)/list/ -I$(LOCAL_PATH)/queue/
-CC_FLAGS := -g $(INCLUDES)
+INCLUDES := -I$(LOCAL_PATH)
+CC_FLAGS := -g $(INCLUDES) #-DCHOOSE_DOUBLY_LINK_LIST
+LK_FLAGS := -lcunit -static
+TEST_INC = -I/usr/local/include/CUnit
+TEST_LIB = -L/usr/local/lib/
 
 # define the compiler
 CC = gcc
+AR = ar 
 
 # define the phony target
 .PHONY : all clean
 
+all: $(TARGET) $(TEST_TARGET)
 # build the target 
-all: $(BUILD_DIR)/$(TARGET)
-$(BUILD_DIR)/$(TARGET): $(OBJS)
+$(TARGET): $(OBJS)
+	@if [ ! -d $(BUILD_DIR) ]; then mkdir -p $(BUILD_DIR); fi;\
+	$(AR) cq $@ $^
+
+$(TEST_TARGET): $(TESTOBJ) $(OBJS)
 	@if [ ! -d $(BUILD_DIR) ]; then mkdir -p $(BUILD_DIR); fi;\
 	$(CC) $^ $(LK_FLAGS) -o $@
 
@@ -52,3 +65,4 @@ $(DEP_DIR)/%.d : %.c
 # clean all products
 clean:
 	-rm -r $(BUILD_DIR)
+	-rm -f $(TARGET) $(TEST_TARGET)

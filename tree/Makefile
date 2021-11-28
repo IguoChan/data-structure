@@ -1,5 +1,5 @@
 # define the target
-TARGET = binary_tree.a
+TARGET = tree.a
 TEST_TARGET = test-tree
 
 # define the Build Directory

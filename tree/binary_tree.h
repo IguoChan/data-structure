@@ -1,8 +1,4 @@
-#include <stdlib.h>
-
-
-
-typedef int myElement;
+#include "tree.h"
 
 typedef struct searchTreeNode searchTree_t;
 typedef struct searchTreeNode searchTreePos_t;
@@ -14,6 +10,6 @@ searchTreePos_t *search_tree_min(searchTree_t *T);searchTreePos_t *search_tree_m
 searchTree_t *delete_search_tree(myElement x, searchTree_t *T);
 int search_tree_height(searchTree_t *T);
 void in_order_walk(searchTree_t *T);
-void BFS_print(searchTree_t *T);
+void search_tree_BFS_print(searchTree_t *T);
 void BFS(searchTree_t *T);
 searchTree_t* invertTree(searchTree_t* T);

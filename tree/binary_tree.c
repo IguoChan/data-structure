@@ -1,9 +1,4 @@
-#include <stdio.h>
-
 #include "binary_tree.h"
-
-#define MAX_INT(x, y) ((x) > (y) ? (x) : (y))
-#define MAX_NUM 1000
 
 typedef struct searchTreeNode
 {
@@ -12,15 +7,11 @@ typedef struct searchTreeNode
     struct searchTreeNode *right;
 } searchTreeNode_t;
 
-typedef struct searchTreeNode searchTree_t;
-typedef struct searchTreeNode searchTreePos_t;
-
 searchTree_t *search_tree_insert(myElement x, searchTree_t *T)
 {
     if (T == NULL) {
         T = malloc(sizeof(searchTree_t));
         if (!T) return NULL;
-
         T->data = x;
         T->left = T->right = NULL;
     } else if (x < T->data) {
@@ -193,7 +184,7 @@ void BFS(searchTree_t *T)
 void printLevel(searchTree_t *T, int level)
 {
     if (T == NULL) {
-        printf("NULL ");
+        if (level == 1) printf("NULL ");
     } else {
         if (level == 1) {
             printf("%d ", T->data);
@@ -204,7 +195,7 @@ void printLevel(searchTree_t *T, int level)
     }
 }
 
-void BFS_print(searchTree_t *T) {
+void search_tree_BFS_print(searchTree_t *T) {
     if (T == NULL) return;
 
     int height = search_tree_height(T);
@@ -216,7 +207,8 @@ void BFS_print(searchTree_t *T) {
 
 // 翻转二叉树
 // 注意翻转后的二叉树不再是搜索二叉树，也就不具备原本的一些特性，以上函数都用不上了
-searchTree_t* invertTree(searchTree_t* T) {
+searchTree_t* invertTree(searchTree_t* T)
+{
     if (T == NULL) return NULL;
 
     searchTree_t *pl = T->left;

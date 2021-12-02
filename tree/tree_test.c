@@ -28,7 +28,7 @@ void test_binary_tree_insert()
     // T = delete_search_tree(3, T);
     // search_tree_BFS_print(T);
     // printf("\n~~~~~~\n");
-    for (myElement i = 10; i > 0; i--) {
+    for (myElement i = 0; i < 10; i++) {
         T = search_tree_insert(i, T);
     }
     search_tree_BFS_print(T);
@@ -44,11 +44,25 @@ void test_rbtree_insert()
     // for (myElement i = 30; i > 10; i--) {
     //     rbtree_insert(T, i);
     // }
-    myElement datas[14] = {10,85,15,70,20,60,30,50,65,80,90,40,5,55};
-    for (int i = 0; i < 14; i++) rbtree_insert(T, datas[i]);
+    // myElement datas[14] = {10,85,15,70,20,60,30,50,65,80,90,40,5,55};
+    for (int i = 0; i < 10; i++) rbtree_insert(T, i);
 
-    
     rbtree_BSF_print(T);
+
+    rbTreePos_t *pos = rbtree_search(T, 30);
+    // printf("data = %d\n", pos->data);
+
+    pos = rbtree_min(T);
+    // printf("data = %d\n", pos->data);
+
+    pos = rbtree_max(T);
+    // printf("data = %d\n", pos->data);
+
+    // rbtree_delete(T, 40);
+    // rbtree_BSF_print(T);
+    rbtree_delete(T, 5);
+    rbtree_BSF_print(T);
+
 }
 
 int main(int argc, char * argv[])

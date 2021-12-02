@@ -1,20 +1,13 @@
 #include "rb_tree.h"
 
-typedef enum ColorType {RED, BLACK} ColorType;
-
-typedef struct rbTreeNode {
-    myElement data;
-    struct rbTreeNode *parent;
-    struct rbTreeNode *left;
-    struct rbTreeNode *right;
-    ColorType color;
-} rbTreeNode_t;
-
-struct rbTree {
-    rbTreeNode_t *root;
-};
-
 rbTreeNode_t *NilNode = NULL;
+
+void refreshe_nilnode()
+{
+    NilNode->parent = NilNode->left = NilNode->right = NilNode;
+    NilNode->color = BLACK;
+    NilNode->data = INT_MAX;
+}
 
 rbTree_t *rbtree_init()
 {
@@ -33,6 +26,61 @@ rbTree_t *rbtree_init()
     T->root = NilNode;
 
     return T;
+}
+
+rbTreePos_t *rbtree_search1(rbTreeNode_t *node, myElement x)
+{
+    if (node == NilNode) return NULL;
+
+    if (x == node->data) return node;
+
+    if (x < node->data) return rbtree_search1(node->left, x);
+    else return rbtree_search1(node->right, x);
+}
+
+rbTreePos_t *rbtree_search(rbTree_t *T, myElement x)
+{
+    if (T == NULL) return NULL;
+
+    return rbtree_search1(T->root, x);
+}
+
+rbTreePos_t *rbtree_min1(rbTreeNode_t *node)
+{
+    if (node == NilNode) return NULL;
+
+    rbTreePos_t *min = node;
+    while (min->left != NilNode)
+    {
+        min = min->left;
+    }
+    return min;
+}
+
+rbTreePos_t *rbtree_min(rbTree_t *T)
+{
+    if (T == NULL) return NULL;
+
+    return rbtree_min1(T->root);
+}
+
+rbTreePos_t *rbtree_max1(rbTreeNode_t *node)
+{
+    if (node == NilNode) return NULL;
+
+    rbTreePos_t *min = node;
+    while (min->right != NilNode)
+    {
+        min = min->right;
+    }
+    return min;
+}
+
+rbTreePos_t *rbtree_max(rbTree_t *T)
+{
+    if (T == NULL) return NULL;
+
+    return rbtree_max1(T->root);
 }
 
 void rbtree_left_rotate(rbTree_t *T, rbTreeNode_t *x)
@@ -146,7 +194,6 @@ void rbtree_insert(rbTree_t *T, myElement x)
     else if (x < Y->data) Y->left = Z;
     else Y->right = Z;
 
-
     rbtree_insert_fixup(T, Z);
 }
 
@@ -155,6 +202,119 @@ int rbtree_height(rbTreeNode_t *node)
     if (node == NilNode) return 0;
 
     return MAX_INT(rbtree_height(node->left), rbtree_height(node->right)) + 1;
+}
+
+void rbtree_transplant(rbTree_t *T, rbTreeNode_t *u, rbTreeNode_t *v)
+{
+    if (u->parent == NilNode) T->root = v;
+    else if (u == u->parent->left) u->parent->left = v;
+    else u->parent->right = v;
+    v->parent = u->parent;
+}
+
+void rbtree_delete_fixup(rbTree_t *T, rbTreeNode_t *node)
+{
+    rbTreeNode_t *w;
+    while(node != T->root && node->color == BLACK) {
+        if (node == node->parent->left) {
+            w = node->parent->right;
+            if (w->color == RED) {
+                // case1
+                w->color = BLACK;
+                node->parent->color = RED;
+                rbtree_left_rotate(T, node->parent);
+                w = node->parent->right;
+            }
+            if (w->left->color == BLACK && w->right->color == BLACK) {
+                // case2
+                w->color = RED;
+                node = node->parent;
+            } else if (w->right->color == BLACK) {
+                // case3
+                w->left->color = BLACK;
+                w->color = RED;
+                rbtree_right_rotate(T, w);
+                w = node->parent->right;
+            } else {
+                // case4
+                w->color = node->parent->color;
+                node->parent->color = BLACK;
+                w->right->color = BLACK;
+                rbtree_left_rotate(T, node->parent);
+                node = T->root;
+            }
+        } else if (node == node->parent->right) {
+            // 镜像
+            w = node->parent->left;
+            if (w->color == RED) {
+                // case1
+                w->color = BLACK;
+                node->parent->color = RED;
+                rbtree_right_rotate(T, node->parent);
+                w = node->parent->left;
+            }
+            if (w->left->color == BLACK && w->right->color == BLACK) {
+                // case2
+                w->color = RED;
+                node = node->parent;
+            } else if (w->left->color == BLACK) {
+                // case3
+                w->right->color = BLACK;
+                w->color = RED;
+                rbtree_left_rotate(T, w);
+                w = node->parent->left;
+            } else {
+                // case4
+                w->color = node->parent->color;
+                node->parent->color = BLACK;
+                w->left->color = BLACK;
+                rbtree_right_rotate(T, node->parent);
+                node = T->root;
+            }
+        }
+    }
+    node->color = BLACK;
+}
+
+void rbtree_delete1(rbTree_t *T, rbTreeNode_t *node, myElement x)
+{
+    if (node == NilNode) return;
+
+    rbTreeNode_t *origin;
+    rbTreeNode_t *tmp;
+
+    if (x < node->data) return rbtree_delete1(T, node->left, x);
+    else if (x > node->data) return rbtree_delete1(T, node->right, x);
+    // 以下两种情况都是 x == node->data
+    else if (node->left != NilNode && node->right != NilNode) {
+        // 两个儿子
+        tmp = rbtree_min1(node->right);
+        node->data = tmp->data;
+        return rbtree_delete1(T, node->right, tmp->data);
+    } else {
+        tmp = node;
+        // 如果没有左儿子，则将右儿子代替node，不管右儿子是不是NilNode
+        if (node->left == NilNode) {
+            origin = node->right;
+            rbtree_transplant(T, node, node->right);
+        }
+        else if (node->right == NilNode) {
+            origin = node->left;
+            rbtree_transplant(T, node, node->left);
+        }
+    }
+
+    if (tmp->color == BLACK) {
+        rbtree_delete_fixup(T, origin);
+    }
+    free(tmp);
+}
+
+void rbtree_delete(rbTree_t *T, myElement x)
+{
+    if (T == NULL) return;
+
+    return rbtree_delete1(T, T->root, x);
 }
 
 void rbtree_printLevel(rbTreeNode_t *node, int level)

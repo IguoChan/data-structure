@@ -1,12 +1,5 @@
 #include "binary_tree.h"
 
-typedef struct searchTreeNode
-{
-    myElement data; // use int for data
-    struct searchTreeNode *left;
-    struct searchTreeNode *right;
-} searchTreeNode_t;
-
 searchTree_t *search_tree_insert(myElement x, searchTree_t *T)
 {
     if (T == NULL) {
@@ -43,15 +36,10 @@ searchTreePos_t *search_tree_search(searchTree_t *T, myElement k)
 {
     if (T == NULL) return NULL;
 
-    if (k == T->data) {
-        return T;
-    }
+    if (k == T->data) return T;
 
-    if (k < T->data) {
-        return search_tree_search(T->left, k);
-    } else {
-        return search_tree_search(T->right, k);
-    }
+    if (k < T->data) return search_tree_search(T->left, k);
+    else return search_tree_search(T->right, k);
 }
 
 searchTreePos_t *search_tree_min(searchTree_t *T)
@@ -128,7 +116,7 @@ searchTree_t *delete_search_tree(myElement x, searchTree_t *T)
         /*
         tmp = search_tree_min(T->right);
         T->data = tmp->data;
-        T->right = delete(T->data, T->right);
+        T->right = delete_search_tree(T->data, T->right);
         */
     } else {
         tmp = T;
@@ -184,7 +172,7 @@ void BFS(searchTree_t *T)
 void printLevel(searchTree_t *T, int level)
 {
     if (T == NULL) {
-        if (level == 1) printf("NULL ");
+        printf("NULL ");
     } else {
         if (level == 1) {
             printf("%d ", T->data);

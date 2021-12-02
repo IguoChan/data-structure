@@ -3,6 +3,13 @@
 typedef struct searchTreeNode searchTree_t;
 typedef struct searchTreeNode searchTreePos_t;
 
+typedef struct searchTreeNode
+{
+    myElement data; // use int for data
+    struct searchTreeNode *left;
+    struct searchTreeNode *right;
+} searchTreeNode_t;
+
 searchTree_t *search_tree_insert(myElement x, searchTree_t *T);
 void destroy_search_tree(searchTree_t *T);
 searchTreePos_t *search_tree_search(searchTree_t *T, myElement k);

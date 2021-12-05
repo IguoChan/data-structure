@@ -1,3 +1,6 @@
+#ifndef _RB_TREE_H_
+#define _RB_TREE_H_
+
 #include "tree.h"
 
 typedef struct rbTree rbTree_t;
@@ -23,3 +26,5 @@ rbTreePos_t *rbtree_search(rbTree_t *T, myElement x);
 rbTreePos_t *rbtree_min(rbTree_t *T);
 rbTreePos_t *rbtree_max(rbTree_t *T);
 void rbtree_delete(rbTree_t *T, myElement x);
+
+#endif

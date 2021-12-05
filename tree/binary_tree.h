@@ -1,3 +1,6 @@
+#ifndef _BINARY_TREE_H_
+#define _BINARY_TREE_H_
+
 #include "tree.h"
 
 typedef struct searchTreeNode searchTree_t;
@@ -20,3 +23,5 @@ void in_order_walk(searchTree_t *T);
 void search_tree_BFS_print(searchTree_t *T);
 void BFS(searchTree_t *T);
 searchTree_t* invertTree(searchTree_t* T);
+
+#endif

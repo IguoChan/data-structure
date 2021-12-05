@@ -280,7 +280,7 @@ void rbtree_delete1(rbTree_t *T, rbTreeNode_t *node, myElement x)
 {
     if (node == NilNode) return;
 
-    rbTreeNode_t *origin;
+    rbTreeNode_t *current;
     rbTreeNode_t *tmp;
 
     if (x < node->data) return rbtree_delete1(T, node->left, x);
@@ -295,17 +295,17 @@ void rbtree_delete1(rbTree_t *T, rbTreeNode_t *node, myElement x)
         tmp = node;
         // 如果没有左儿子，则将右儿子代替node，不管右儿子是不是NilNode
         if (node->left == NilNode) {
-            origin = node->right;
+            current = node->right;
             rbtree_transplant(T, node, node->right);
         }
         else if (node->right == NilNode) {
-            origin = node->left;
+            current = node->left;
             rbtree_transplant(T, node, node->left);
         }
     }
 
     if (tmp->color == BLACK) {
-        rbtree_delete_fixup(T, origin);
+        rbtree_delete_fixup(T, current);
     }
     free(tmp);
 }
